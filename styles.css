@@ -1007,8 +1007,8 @@ footer {
     position: fixed;
     bottom: 80px;
     right: 20px;
-    width: 350px;
-    height: 500px;
+    width: 300px; /* Reduced width */
+    height: 400px; /* Reduced height */
     display: none;
     border-radius: 10px;
     overflow: hidden;
