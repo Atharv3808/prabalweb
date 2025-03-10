@@ -129,4 +129,12 @@ function toggleMenu() {
     document.querySelector('.hamburger .bar3').classList.toggle('change3');
 }
 
+// Toggle Chatbot Visibility
+document.getElementById("chatbot-button").addEventListener("click", function () {
+    var chatbot = document.getElementById("chatbot-container");
+    chatbot.style.display = chatbot.style.display === "block" ? "none" : "block";
+});
+
+
+
 
