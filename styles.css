@@ -698,7 +698,15 @@ footer {
         margin-bottom: 50px;
         position: relative;
     }
-
+    .royal-patron{
+        text-align: center;
+    }
+    .heraldic-title{
+        text-align: center;
+    }
+    .scroll-text{
+        
+    }
     .royal-decree::after {
         content: '';
         position: absolute;
