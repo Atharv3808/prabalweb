@@ -135,6 +135,104 @@ document.getElementById("chatbot-button").addEventListener("click", function () 
     chatbot.style.display = chatbot.style.display === "block" ? "none" : "block";
 });
 
+document.addEventListener('DOMContentLoaded', (event) => {
+    var loader = document.getElementById('loader');
+    var video = loader.querySelector('video');
+
+    video.addEventListener('ended', function() {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 1000); // Loader fades out over 1 second
+    });
+
+    // Ensure loader disappears even if video doesn't end (e.g., if it's a loop)
+    setTimeout(() => {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 1000); // Loader fades out over 1 second
+    }, 14000); // Loader disappears after 12 seconds
+});
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const loader = document.getElementById('loader');
+    const video = document.getElementById('loaderVideo');
+    const unmuteBtn = document.getElementById('unmuteBtn');
+    
+    // Set initial state
+    let isMuted = true;
+    video.muted = true; // Start muted to comply with autoplay policies
+    
+    // Minimum display time (3 seconds)
+    const minimumLoadTime = 14000;
+    const startTime = Date.now();
+    
+    // Mute/unmute control
+    unmuteBtn.addEventListener('click', () => {
+        isMuted = !isMuted;
+        video.muted = isMuted;
+        unmuteBtn.innerHTML = isMuted ? 
+            '<i class="fas fa-volume-mute"></i>' : 
+            '<i class="fas fa-volume-up"></i>';
+    });
+    
+    // Handle video autoplay
+    const playVideo = () => {
+        video.play().catch(error => {
+            // Show fallback play button
+            const playOverlay = document.createElement('div');
+            playOverlay.className = 'play-overlay';
+            playOverlay.innerHTML = '<button class="play-btn">Click to Start</button>';
+            loader.appendChild(playOverlay);
+            
+            document.querySelector('.play-btn').addEventListener('click', () => {
+                video.play();
+                playOverlay.remove();
+            });
+        });
+    }
+    
+    // iOS detection
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    
+    if (isIOS) {
+        // Show custom play button for iOS
+        const iosPlayBtn = document.createElement('div');
+        iosPlayBtn.className = 'ios-play-overlay';
+        iosPlayBtn.innerHTML = '<button class="play-btn">Tap to Play</button>';
+        loader.appendChild(iosPlayBtn);
+        
+        iosPlayBtn.querySelector('button').addEventListener('click', () => {
+            video.play();
+            iosPlayBtn.remove();
+        });
+    } else {
+        playVideo();
+    }
+    
+    // Handle loader dismissal
+    const dismissLoader = () => {
+        const loadTime = Date.now() - startTime;
+        const remainingTime = Math.max(minimumLoadTime - loadTime, 0);
+        
+        setTimeout(() => {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+                video.pause();
+            }, 14000);
+        }, remainingTime);
+    }
+    
+    video.addEventListener('playing', dismissLoader);
+    video.addEventListener('ended', dismissLoader);
+    
+    // Fallback timeout
+    setTimeout(dismissLoader, 5000);
+});
+
+
 
 
 
